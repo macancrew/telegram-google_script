@@ -1,0 +1,70 @@
+var token = "2002671467:xxxxxxxxxxxxxxxxxxxxxxxxxxxx"; //token bot anda
+var apitele = "https://api.telegram.org/bot"+token
+
+
+function sendText(id,text) {
+  text = encodeURIComponent(text)
+  var url = apitele+"/sendMessage?chat_id=" + id + "&text=" + text;
+  var response = UrlFetchApp.fetch(url);
+  var js = JSON.parse(response);
+  var message_id = js.result.message_id
+  return message_id
+}
+
+function gamb(id,pho) {
+  var url = "https://api.telegram.org/bot"+token+"/sendPhoto?chat_id="+id+"&photo="+pho;
+  UrlFetchApp.fetch(url);
+}
+
+
+/////// start fungsi utama bot
+
+function doPost(e) {
+
+
+
+var data = JSON.parse(e.postData.contents);
+
+try {
+  var text0 = data.message.text;
+  var text = data.message.text;
+  text = text.toLowerCase();
+}catch(err) { }
+
+
+  var id = data.message.chat.id;
+  var from = data.message.from.id;
+  var uname = data.message.from.username;
+  var ffname = data.message.from.first_name;
+  var flname = data.message.from.last_name;
+  if(flname == undefined){flname = ""}
+  var fname = ffname + " " + flname;
+  var msid = data.message.message_id;
+  var ch_type = data.message.chat.type; //private or group
+
+
+
+ //// handle inputan ke bot
+   if (text0.substring(0, 5) == ("/help")){
+    var ha = "tolong...tolong...tolong...\n\nCreate by @xoerbiston"
+    sendText(id,ha)
+
+  
+    }else if (text.substring(0, 3) == ("/me")){
+    var pho = "https://raw.githubusercontent.com/macancrew/cmdx4/main/me.jpg"
+    gamb(id,pho)
+   
+   }
+  
+}/////// end fungsi utama bot
+
+
+
+
+
+/// catatan tambahan 
+/// karena ini adalah bot dua arah, artinya harus aktifkan webhook
+/// contoh format webhook telegram
+/// https://api.telegram.org/bot"+TOKEN-BOT-ANDA+"/setwebhook?url="+URL+GOOGLE+SCRIPT+ANDA
+/// cara ambil URL+GOOGLE+SCRIPT+ANDA
+/// https://youtu.be/kO-8yktTVx8
